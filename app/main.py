@@ -2,10 +2,14 @@ from fastapi import FastAPI
 
 app = FastAPI()
 
-@app.post("/")
+@app.get("/")
 def read_root():
+    return {"Hello": "World"}
+
+@app.post("/")
+def post_test():
     return {"action": "reply", "replies": ["Hello, World!"]}
 
 @app.post("/echo")
-def read_item():
+def echo():
     return {"action": "reply", "replies": ["Echo!"]}
