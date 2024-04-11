@@ -2,6 +2,6 @@ from fastapi import FastAPI
 
 app = FastAPI()
 
-@app.get("/")
+@app.post("/")
 def read_root():
-    return {"Hello": "World"}
+    return {"action": "reply", "replies": ["Hello, World!"]}
