@@ -1,5 +1,8 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from pydantic import BaseModel
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 class Message(BaseModel):
     text: str
@@ -23,12 +26,37 @@ class ReqPayload(BaseModel):
 
 app = FastAPI()
 
+@app.middleware("http")
+async def log_requests(request: Request, call_next):
+    # Log the request method and URL
+    logging.info(f"{request.method} {request.url}")
+    
+    # Log the request headers
+    logging.info("Headers:")
+    for name, value in request.headers.items():
+        logging.info(f"{name}: {value}")
+    
+    # Log the request body (only for POST requests)
+    if request.method == "POST":
+        body = await request.json()
+        logging.info("Body:")
+        logging.info(body)
+    
+    # Call the next middleware or route handler
+    response = await call_next(request)
+    
+    # Optionally, log the response status code
+    logging.info(f"Response status code: {response.status_code}")
+    
+    return response
+
+
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
 
 @app.post("/")
-def post_test():
+def post_test(request: Request):
     return {"action": "reply", "replies": ["Hello, World!"]}
 
 @app.post("/echo")
