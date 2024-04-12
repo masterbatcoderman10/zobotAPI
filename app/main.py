@@ -16,6 +16,7 @@ class Visitor(BaseModel):
 class Parameters(BaseModel):
     message: Message = None
     visitor: Visitor
+    app_id: str
 
 class ReqPayload(BaseModel):
     parameters: Parameters
