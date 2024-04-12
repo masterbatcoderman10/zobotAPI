@@ -20,7 +20,7 @@ class Visitor(BaseModel):
     country_code: str
     country: str
     os: str
-    department_id: str
+    department_id: int
     channel: str
     language: str
     time_zone: str
