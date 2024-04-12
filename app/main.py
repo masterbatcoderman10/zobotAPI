@@ -1,11 +1,12 @@
 from fastapi import FastAPI, Request
+from .utils import openai_secret
 from pydantic import BaseModel
 import logging
+from openai import OpenAI
+from typing import Optional, Dict, List
 
 logging.basicConfig(level=logging.INFO)
-
-from pydantic import BaseModel
-from typing import Optional, Dict, List
+openai_client = OpenAI(api_key=openai_secret)
 
 class Location(BaseModel):
     country: str
