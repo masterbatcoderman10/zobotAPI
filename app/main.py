@@ -14,8 +14,11 @@ class Visitor(BaseModel):
     channel: str
 
 class Parameters(BaseModel):
-    message: Message
+    message: Message = None
     visitor: Visitor
+
+class ReqPayload(BaseModel):
+    parameters: Parameters
 
 app = FastAPI()
 
@@ -28,5 +31,8 @@ def post_test():
     return {"action": "reply", "replies": ["Hello, World!"]}
 
 @app.post("/echo")
-def echo(params: Parameters):
-    return {"action": "reply", "replies": [params.message.text]}
+def echo(payload: ReqPayload):
+    #check if message is there or not
+    if not payload.parameters.message:
+        return {"action": "reply", "replies": ["Hi, this is echo bot"]}
+    return {"action": "reply", "replies": [payload.parameters.message.text]}
