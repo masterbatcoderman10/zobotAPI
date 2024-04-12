@@ -4,25 +4,42 @@ import logging
 
 logging.basicConfig(level=logging.INFO)
 
+from pydantic import BaseModel
+from typing import Optional, Dict, List
+
+class Location(BaseModel):
+    country: str
+
 class Message(BaseModel):
+    meta: Dict = None
     text: str
+    type: str = "text"
 
 class Visitor(BaseModel):
+    active_conversation_id: str
+    country_code: str
     country: str
-    time_zone: str
-    email: str
     os: str
     department_id: str
-    language: str
     channel: str
+    language: str
+    time_zone: str
+    email: str
 
-class Parameters(BaseModel):
-    message: Message = None
-    visitor: Visitor
+class RequestModel(BaseModel):
+    os: str
+    location: Location
+    id: str
     app_id: str
 
 class ReqPayload(BaseModel):
-    parameters: Parameters
+    handler: str = None
+    request: RequestModel = None
+    attachments: List = None
+    org_id: str = None
+    message: Message = None
+    visitor: Visitor = None
+    operation: str = None
 
 app = FastAPI()
 
@@ -62,6 +79,6 @@ def post_test(request: Request):
 @app.post("/echo")
 def echo(payload: ReqPayload):
     #check if message is there or not
-    if not payload.parameters.message:
+    if not payload.message:
         return {"action": "reply", "replies": ["Hi, this is echo bot"]}
-    return {"action": "reply", "replies": [payload.parameters.message.text]}
+    return {"action": "reply", "replies": [payload.message.text]}
