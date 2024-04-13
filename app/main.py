@@ -97,7 +97,9 @@ def chat(payload: ReqPayload):
     - We are always looking for new ways to improve our services
     - We have 3 pricing tiers : Basic, Pro, and Enterprise
     - We offer a free trial for all our services
-    - We also offer a 30-day money-back guarantee"""
+    - We also offer a 30-day money-back guarantee
+    - You can imagine the rest since this is a fictional company
+    - Keep the answers precise and to the point"""
 
     message_text = payload.message.text
 
